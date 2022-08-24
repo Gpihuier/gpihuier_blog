@@ -1,9 +1,11 @@
 package route
 
 import (
-	"github.com/Gpihuier/gpihuier_blog/global"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/Gpihuier/gpihuier_blog/global"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Routers() *gin.Engine {
