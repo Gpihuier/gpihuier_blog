@@ -1,0 +1,35 @@
+# server
+server:
+  addr: 10695
+
+# mysql
+mysql:
+  username: 'root'
+  password: '123456'
+  hostname: '127.0.0.1'
+  database: 'gpihuier_blog'
+  host_port: 3306
+  prefix: 'blog_'
+
+# zap
+zap:
+  level: 'info'
+  format: 'console'
+  prefix: '[gpihuier_blog]'
+  runtime_dir: './runtime'
+  log_dir: './runtime/log'
+  log_in_console: true
+  encode_level: 'CapitalLevelEncoder'
+
+# redis
+redis:
+  db: 0
+  addr: '127.0.0.1:6379'
+  password: ''
+
+# jwt configuration
+jwt:
+  signing_key: 'gpihuier_blog'
+  expires_time: 604800 # 7天
+  buffer_time: 86400 # 1天
+  issuer: 'gpihuier'
