@@ -5,4 +5,5 @@ type Enter struct {
 	Mysql  Mysql  `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	Redis  Redis  `mapstructure:"redis" json:"redis" yaml:"redis"`
 	Zap    Zap    `mapstructure:"zap" json:"zap" yaml:"zap"`
+	Jwt    Jwt    `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 }

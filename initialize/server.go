@@ -34,7 +34,7 @@ func RunSever() {
   **    **    **    **         **  *******      **********
    **  **      **  **          **       **      **      **
     ****        ****           ***********      **      **
-访问地址：http://localhost%s
+访问地址: http://localhost%s
 `, address)
 
 	global.LOG.Error(service.ListenAndServe().Error())
@@ -47,6 +47,7 @@ func initGlobal() {
 	global.CACHE_DRIVE = RedisDrive()
 	global.LOG = Zap()
 	zap.ReplaceGlobals(global.LOG) // 替换全局记录器 后续 可以使用 zap.L()
+	RegisterTable()                // gorm 自动迁移
 }
 
 func initServer(address string, router *gin.Engine) server {

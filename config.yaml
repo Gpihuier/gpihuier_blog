@@ -9,15 +9,15 @@ mysql:
   hostname: '127.0.0.1'
   database: 'gpihuier_blog'
   host_port: 3306
-  prefix: 'blog_'
+  prefix: 'gblog_'
 
 # zap
 zap:
   level: 'info'
   format: 'console'
   prefix: '[gpihuier_blog]'
-  runtime_dir: './runtime'
-  log_dir: './runtime/log'
+  runtime_dir: 'runtime'
+  log_dir: 'runtime/log'
   log_in_console: true
   encode_level: 'CapitalLevelEncoder'
 

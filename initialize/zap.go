@@ -15,13 +15,17 @@ import (
 
 // createDir 创建缓存目录
 func createDir() {
-	if ok, _ := utils.PathExists(global.CONFIG.Zap.RuntimeDir); !ok { // 判断是否有Director文件夹
-		fmt.Printf("create %v directory\n", global.CONFIG.Zap.RuntimeDir)
-		_ = os.Mkdir(global.CONFIG.Zap.RuntimeDir, os.ModePerm)
+	rootPath := utils.GetRootPath()
+	runtimeDir := fmt.Sprintf("%s%s", rootPath, global.CONFIG.Zap.RuntimeDir)
+	if ok, _ := utils.PathExists(runtimeDir); !ok { // 判断是否有Director文件夹
+		fmt.Printf("create %v directory\n", runtimeDir)
+		_ = os.Mkdir(runtimeDir, os.ModePerm)
 	}
-	if ok, _ := utils.PathExists(global.CONFIG.Zap.LogDir); !ok { // 判断是否有Director文件夹
-		fmt.Printf("create %v directory\n", global.CONFIG.Zap.LogDir)
-		_ = os.Mkdir(global.CONFIG.Zap.LogDir, os.ModePerm)
+
+	logDir := fmt.Sprintf("%s%s", rootPath, global.CONFIG.Zap.LogDir)
+	if ok, _ := utils.PathExists(logDir); !ok { // 判断是否有Director文件夹
+		fmt.Printf("create %v directory\n", logDir)
+		_ = os.Mkdir(logDir, os.ModePerm)
 	}
 }
 
@@ -46,10 +50,10 @@ func Zap() (logger *zap.Logger) {
 		return lev >= zap.ErrorLevel
 	})
 	cores := [...]zapcore.Core{
-		getEncoderCore(fmt.Sprintf("./%s/%s/server_debug.log", global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), debugPriority),
-		getEncoderCore(fmt.Sprintf("./%s/%s/server_info.log", global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), infoPriority),
-		getEncoderCore(fmt.Sprintf("./%s/%s/server_warn.log", global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), warnPriority),
-		getEncoderCore(fmt.Sprintf("./%s/%s/server_error.log", global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), errorPriority),
+		getEncoderCore(fmt.Sprintf("%s%s/%s/server_debug.log", utils.GetRootPath(), global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), debugPriority),
+		getEncoderCore(fmt.Sprintf("%s%s/%s/server_info.log", utils.GetRootPath(), global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), infoPriority),
+		getEncoderCore(fmt.Sprintf("%s%s/%s/server_warn.log", utils.GetRootPath(), global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), warnPriority),
+		getEncoderCore(fmt.Sprintf("%s%s/%s/server_error.log", utils.GetRootPath(), global.CONFIG.Zap.LogDir, time.Now().Format("20060102")), errorPriority),
 	}
 	logger = zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
 

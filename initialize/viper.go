@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"fmt"
+	"github.com/Gpihuier/gpihuier_blog/utils"
 
 	"github.com/Gpihuier/gpihuier_blog/global"
 
@@ -11,7 +12,8 @@ import (
 
 func Viper() *viper.Viper {
 	v := viper.New()
-	v.AddConfigPath("../")
+	rootPath := utils.GetRootPath()
+	v.AddConfigPath(rootPath)
 	v.SetConfigType("yaml")
 	v.SetConfigName("config")
 
@@ -19,7 +21,6 @@ func Viper() *viper.Viper {
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
-	fmt.Println(err)
 
 	// 监控并重新读取配置文件
 	v.WatchConfig()

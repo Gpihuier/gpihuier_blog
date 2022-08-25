@@ -14,8 +14,6 @@ func Routers() *gin.Engine {
 	//gin.SetMode("debug")
 	Router := gin.Default()
 
-	global.LOG.Info("register swagger handler")
-
 	var HelloRouter = Router.Group("") // 测试路由
 	{
 		HelloRouter.GET("/hello/:name", func(c *gin.Context) {

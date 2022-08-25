@@ -2,10 +2,12 @@ package initialize
 
 import (
 	"fmt"
+	"go.uber.org/zap"
 	"log"
 	"os"
 	"time"
 
+	"github.com/Gpihuier/gpihuier_blog/app/model"
 	"github.com/Gpihuier/gpihuier_blog/global"
 
 	"gorm.io/driver/mysql"
@@ -52,4 +54,14 @@ func GormMysql() *gorm.DB {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 	return db
 
+}
+
+func RegisterTable() {
+	var err error
+	var enter model.RegisterTables
+	if err = enter.User.RegisterTable(); err != nil {
+		global.LOG.Error("register userTable failed", zap.Error(err))
+		panic(fmt.Errorf("register user table error: %v", err))
+	}
+	global.LOG.Info("register tables success!")
 }
