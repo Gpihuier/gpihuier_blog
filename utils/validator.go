@@ -14,10 +14,9 @@ import (
 )
 
 // ValidatorTrainInit 初始化验证器 注册中文翻译器
-func ValidatorTrainInit() ut.Translator {
+func ValidatorTrainInit(validate *validator.Validate) ut.Translator {
 	uni := ut.New(zh.New())
 	trans, _ := uni.GetTranslator("zh")
-	validate := validator.New()
 	if err := zhTranslations.RegisterDefaultTranslations(validate, trans); err != nil {
 		global.LOG.Error("validate init error", zap.Error(err))
 	}

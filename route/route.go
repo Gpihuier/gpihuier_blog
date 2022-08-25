@@ -23,6 +23,13 @@ func Routers() *gin.Engine {
 			})
 		})
 	}
+
+	// 基础路由不做鉴权
+	PublicRouters := Router.Group("")
+	{
+		RouterEnter.UserRouters.Group(PublicRouters)
+	}
+
 	global.LOG.Info("router register success")
 	return Router
 }
