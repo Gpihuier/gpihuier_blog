@@ -9,3 +9,8 @@ type RegisterUser struct {
 	Email           string `json:"email" validate:"omitempty,email" alias:"邮箱"`
 	Description     string `json:"description" validate:"omitempty,max=255" alias:"个人简介"`
 }
+
+type Login struct {
+	Username string `json:"username" validate:"required" alias:"用户名"`
+	Password string `json:"password" validate:"required" alias:"密码"`
+}

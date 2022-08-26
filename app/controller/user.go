@@ -30,6 +30,21 @@ func (u *User) RegisterUser(c *gin.Context) {
 	utils.SuccessWithMessage("注册成功", c)
 }
 
+// Login 用户登录
 func (u *User) Login(c *gin.Context) {
-	return
+	var req request.Login
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := validate.Validate.User.LoginValidate(&req); err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := server.Server.User.Login(&req)
+	if err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithData(res, "登录成功", c)
 }

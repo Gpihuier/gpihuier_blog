@@ -3,6 +3,7 @@ package route
 import (
 	"net/http"
 
+	"github.com/Gpihuier/gpihuier_blog/app/middleware"
 	"github.com/Gpihuier/gpihuier_blog/global"
 
 	"github.com/gin-gonic/gin"
@@ -28,6 +29,13 @@ func Routers() *gin.Engine {
 	PublicRouters := Router.Group("")
 	{
 		RouterEnter.UserRouters.Group(PublicRouters)
+	}
+
+	// 登录鉴权
+	PrivateGroup := Router.Group("")
+	PrivateGroup.Use(middleware.JwtMiddleware())
+	{
+
 	}
 
 	global.LOG.Info("router register success")

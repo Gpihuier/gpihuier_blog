@@ -1,5 +1,7 @@
 package model
 
-type RegisterTables struct {
+type Group struct {
 	User User
 }
+
+var Model = new(Group)

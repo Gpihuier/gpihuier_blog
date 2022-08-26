@@ -11,9 +11,10 @@ type CustomClaims struct {
 }
 
 type BaseClaims struct {
-	ID       uint64
-	Username string
-	Nickname string
-	Email    string
-	Avatar   string
+	ID          uint64
+	Nickname    string
+	Username    string
+	Avatar      string
+	Email       string
+	Description string
 }

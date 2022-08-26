@@ -7,9 +7,9 @@ import (
 )
 
 type Response struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data any    `json:"data"`
 }
 
 const (
@@ -30,7 +30,7 @@ func GetMsg(code int) string {
 	return ""
 }
 
-func Result(code int, msg string, data interface{}, c *gin.Context) {
+func Result(code int, msg string, data any, c *gin.Context) {
 	c.JSON(SUCCESS, Response{
 		Code: code,
 		Msg:  msg,
@@ -39,22 +39,22 @@ func Result(code int, msg string, data interface{}, c *gin.Context) {
 }
 
 func Success(c *gin.Context) {
-	Result(SUCCESS, GetMsg(SUCCESS), map[string]interface{}{}, c)
+	Result(SUCCESS, GetMsg(SUCCESS), map[string]any{}, c)
 }
 
 func Fail(c *gin.Context) {
-	Result(ERROR, GetMsg(ERROR), map[string]interface{}{}, c)
+	Result(ERROR, GetMsg(ERROR), map[string]any{}, c)
 }
 
 func SuccessWithMessage(message string, c *gin.Context) {
-	Result(SUCCESS, message, map[string]interface{}{}, c)
+	Result(SUCCESS, message, map[string]any{}, c)
 }
 
 func FailWithMessage(message string, c *gin.Context) {
-	Result(ERROR, message, map[string]interface{}{}, c)
+	Result(ERROR, message, map[string]any{}, c)
 }
 
-func SuccessWithData(data interface{}, message string, c *gin.Context) {
+func SuccessWithData(data any, message string, c *gin.Context) {
 	if message != "" {
 		Result(SUCCESS, message, data, c)
 	} else {
@@ -63,7 +63,7 @@ func SuccessWithData(data interface{}, message string, c *gin.Context) {
 
 }
 
-func FailWithData(data interface{}, message string, c *gin.Context) {
+func FailWithData(data any, message string, c *gin.Context) {
 	if message != "" {
 		Result(ERROR, message, data, c)
 	} else {

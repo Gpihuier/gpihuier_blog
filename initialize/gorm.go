@@ -34,9 +34,9 @@ func GormMysql() *gorm.DB {
 		Logger: logger.New( // 日志
 			log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 			logger.Config{
-				SlowThreshold: time.Second,   // 慢 SQL 阈值
-				LogLevel:      logger.Silent, // Log level
-				Colorful:      false,         // 禁用彩色打印
+				SlowThreshold: time.Second, // 慢 SQL 阈值
+				LogLevel:      logger.Info, // Log level
+				Colorful:      false,       // 禁用彩色打印
 			},
 		),
 	})
@@ -58,7 +58,7 @@ func GormMysql() *gorm.DB {
 
 func RegisterTable() {
 	var err error
-	var enter model.RegisterTables
+	enter := model.Model
 	if err = enter.User.RegisterTable(); err != nil {
 		global.LOG.Error("register userTable failed", zap.Error(err))
 		panic(fmt.Errorf("register user table error: %v", err))
