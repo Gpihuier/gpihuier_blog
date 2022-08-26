@@ -18,5 +18,6 @@ func (u *User) RegisterUserValidate(r *request.RegisterUser) error {
 			return errors.New(validateErr.Translate(trans))
 		}
 	}
+	
 	return nil
 }

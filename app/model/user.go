@@ -2,6 +2,7 @@ package model
 
 import (
 	"github.com/Gpihuier/gpihuier_blog/global"
+	"github.com/Gpihuier/gpihuier_blog/utils"
 )
 
 type User struct {
@@ -26,5 +27,6 @@ func (u *User) RegisterTable() error {
 
 
 func (u *User) RegisterUser() error {
+	utils.BcryptHash()
 	return nil
 }
