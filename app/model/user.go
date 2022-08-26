@@ -1,8 +1,9 @@
 package model
 
 import (
+	"errors"
 	"github.com/Gpihuier/gpihuier_blog/global"
-	"github.com/Gpihuier/gpihuier_blog/utils"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -10,9 +11,9 @@ type User struct {
 	Nickname    string `gorm:"size:20;not null;default:'';comment:用户昵称"`
 	Username    string `gorm:"size:20;uniqueIndex;not null;default:'';comment:用户名/账号"`
 	Password    string `gorm:"size:128;not null;default:'';comment:密码"`
-	Avatar      string `gorm:"not null;default:'';comment:头像"`
+	Avatar      string `gorm:"size:255;not null;default:'';comment:头像"`
 	Email       string `gorm:"not null;default:'';comment:邮箱"`
-	Description string `gorm:"not null;default:'';comment:个人简介"`
+	Description string `gorm:"size:255;not null;default:'';comment:个人简介"`
 }
 
 // RegisterTable register user table
@@ -25,8 +26,23 @@ func (u *User) RegisterTable() error {
 	return nil
 }
 
+// JudgeRegisterUserRepeat 检查用户信息是否重复
+func (u *User) JudgeRegisterUserRepeat() error {
+	var result User
+	isHasUsername := global.DB.Where("username = ?", u.Username).First(&result).Error
+	if !errors.Is(isHasUsername, gorm.ErrRecordNotFound) {
+		return errors.New("用户名已经被注册")
+	}
+	isHasEmail := global.DB.Where("username = ?", u.Email).First(&result).Error
+	if !errors.Is(isHasEmail, gorm.ErrRecordNotFound) {
+		return errors.New("邮箱已经被注册")
+	}
+	return nil
+}
 
 func (u *User) RegisterUser() error {
-	utils.BcryptHash()
-	return nil
+	if err := u.JudgeRegisterUserRepeat(); err != nil {
+		return err
+	}
+	return global.DB.Create(&u).Error
 }
