@@ -56,12 +56,35 @@ func GormMysql() *gorm.DB {
 
 }
 
+// RegisterTable 自动迁移
 func RegisterTable() {
+	// TODO 函数式错误编程
 	var err error
 	enter := model.Model
 	if err = enter.User.RegisterTable(); err != nil {
-		global.LOG.Error("register userTable failed", zap.Error(err))
-		panic(fmt.Errorf("register user table error: %v", err))
+		global.LOG.Error("register User Table failed", zap.Error(err))
+		panic(fmt.Errorf("register user table failed: %v", err))
 	}
+	if err = enter.Article.RegisterTable(); err != nil {
+		global.LOG.Error("register Article Table failed", zap.Error(err))
+		panic(fmt.Errorf("register Article table failed: %v", err))
+	}
+	if err = enter.ArticleContent.RegisterTable(); err != nil {
+		global.LOG.Error("register ArticleContent Table failed", zap.Error(err))
+		panic(fmt.Errorf("register ArticleContent table failed: %v", err))
+	}
+	if err = enter.Category.RegisterTable(); err != nil {
+		global.LOG.Error("register Category Table failed", zap.Error(err))
+		panic(fmt.Errorf("register Category table failed: %v", err))
+	}
+	if err = enter.Tag.RegisterTable(); err != nil {
+		global.LOG.Error("register tagTable failed", zap.Error(err))
+		panic(fmt.Errorf("register tag table failed: %v", err))
+	}
+	if err = enter.ArticleTag.RegisterTable(); err != nil {
+		global.LOG.Error("register ArticleTag Table failed", zap.Error(err))
+		panic(fmt.Errorf("register ArticleTag table failed: %v", err))
+	}
+
 	global.LOG.Info("register tables success!")
 }

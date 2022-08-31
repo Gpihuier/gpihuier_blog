@@ -9,13 +9,13 @@ mysql:
   hostname: '127.0.0.1'
   database: 'gpihuier_blog'
   host_port: 3306
-  prefix: 'gblog_'
+  prefix: 'blog_'
 
 # zap
 zap:
   level: 'info'
   format: 'console'
-  prefix: '[gpihuier_blog]'
+  prefix: '[Gpihuier_blog]'
   runtime_dir: 'runtime'
   log_dir: 'runtime/log'
   log_in_console: true
@@ -29,7 +29,7 @@ redis:
 
 # jwt configuration
 jwt:
-  signing_key: 'gpihuier_blog'
+  signing_key: 'Gpihuier_blog'
   expires_time: 604800 # 7天
   buffer_time: 86400 # 1天
-  issuer: 'gpihuier'
+  issuer: 'Gpihuier'

@@ -13,14 +13,14 @@ func TimestampToDate(timestamp int64, layout string) string {
 }
 
 // DateToTime 解析字符串格式的时间
-func DateToTime(layout string) (time.Time, error) {
+func DateToTime(layout string) (*time.Time, error) {
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
-		return time.Time{}, err
+		return nil, err
 	}
 	obj, err := time.ParseInLocation("2006-01-02 15:04:05", layout, loc)
 	if err != nil {
-		return time.Time{}, err
+		return nil, err
 	}
-	return obj, nil
+	return &obj, nil
 }
