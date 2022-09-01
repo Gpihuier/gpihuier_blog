@@ -12,7 +12,7 @@ import (
 type User struct {
 	BaseModel
 	Nickname      string    `gorm:"size:20;not null;default:'';comment:用户昵称"`
-	Username      string    `gorm:"size:20;uniqueIndex;not null;default:'';comment:用户名/账号"`
+	Username      string    `gorm:"size:20;not null;default:'';comment:用户名/账号;index:uk_username,unique,comment:唯一索引用户名"`
 	Password      string    `gorm:"size:128;not null;default:'';comment:密码"`
 	Avatar        string    `gorm:"size:255;not null;default:'';comment:头像"`
 	Email         string    `gorm:"not null;default:'';comment:邮箱"`

@@ -31,11 +31,10 @@ func Routers() *gin.Engine {
 		RouterEnter.UserRouters.Group(PublicRouters)
 	}
 
-	// 登录鉴权
 	PrivateGroup := Router.Group("")
 	PrivateGroup.Use(middleware.JwtMiddleware())
 	{
-
+		RouterEnter.TagRouters.Group(PrivateGroup) // 标签路由
 	}
 
 	global.LOG.Info("router register success")

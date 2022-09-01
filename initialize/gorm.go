@@ -71,6 +71,7 @@ func RegisterTable() {
 	}
 	if err = enter.ArticleContent.RegisterTable(); err != nil {
 		global.LOG.Error("register ArticleContent Table failed", zap.Error(err))
+		global.LOG.Error("register ArticleContent Table failed", zap.Error(err))
 		panic(fmt.Errorf("register ArticleContent table failed: %v", err))
 	}
 	if err = enter.Category.RegisterTable(); err != nil {

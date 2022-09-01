@@ -4,8 +4,8 @@ import "github.com/Gpihuier/gpihuier_blog/global"
 
 type ArticleTag struct {
 	BaseModel
-	ArticleId uint `gorm:"not null;default:0;comment:文章ID"`
-	TagId     uint `gorm:"not null;default:0;comment:标签ID"`
+	ArticleId uint64 `gorm:"not null;default:0;comment:文章ID;index:idx_article_id,unique,comment:普通索引文章id"`
+	TagId     uint64 `gorm:"not null;default:0;comment:标签ID;index:idx_tag_id,unique,comment:普通索引标签id"`
 }
 
 func (a *ArticleTag) RegisterTable() error {

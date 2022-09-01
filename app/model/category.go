@@ -4,7 +4,7 @@ import "github.com/Gpihuier/gpihuier_blog/global"
 
 type Category struct {
 	BaseModel
-	title string `gorm:"size:20;not null;default:'';comment:类别名称"`
+	Title string `gorm:"size:20;not null;default:'';comment:类别名称;uniqueIndex:uk_title,comment:唯一索引类别名称"`
 }
 
 func (c *Category) RegisterTable() error {
