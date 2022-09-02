@@ -7,9 +7,7 @@ import (
 	"github.com/Gpihuier/gpihuier_blog/app/request"
 	"github.com/Gpihuier/gpihuier_blog/app/server"
 	"github.com/Gpihuier/gpihuier_blog/app/validate"
-	"github.com/Gpihuier/gpihuier_blog/global"
 	"github.com/Gpihuier/gpihuier_blog/utils"
-	"go.uber.org/zap"
 	"io"
 	"strconv"
 
@@ -84,8 +82,7 @@ func (t *Tag) Update(c *gin.Context) {
 	id := c.Param("id")
 	uint64Id, err := strconv.ParseUint(id, 0, 64)
 	if err != nil {
-		utils.FailWithMessage("未知的错误", c)
-		global.LOG.Error("字符串转uint64出现错误", zap.Error(err))
+		utils.FailWithMessage("请输入整数", c)
 		return
 	}
 	if err = server.Server.Tag.Update(uint64Id, &req); err != nil {
