@@ -21,3 +21,14 @@ func (t *Tag) TagSaveValidate(req *request.TagSave) error {
 	}
 	return nil
 }
+
+func (t *Tag) TagListValidate(req *request.TagList) error {
+	validate := validator.New()
+	trans := utils.ValidatorTrainInit(validate)
+	if err := validate.Struct(req); err != nil {
+		for _, validateErr := range err.(validator.ValidationErrors) {
+			return errors.New(validateErr.Translate(trans))
+		}
+	}
+	return nil
+}

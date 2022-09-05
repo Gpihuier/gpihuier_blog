@@ -20,18 +20,23 @@ type Tag struct{}
 // @method: GET
 // @route: /api/tag/list
 func (t *Tag) List(c *gin.Context) {
-	var req request.TagSave
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var req request.TagList
+	if err := c.ShouldBindQuery(&req); err != nil {
 		if !errors.Is(err, io.EOF) { // 排除io.EOF 错误
 			utils.FailWithMessage(err.Error(), c)
 			return
 		}
 	}
-	if err := validate.Validate.Tag.TagSaveValidate(&req); err != nil {
+	if err := validate.Validate.Tag.TagListValidate(&req); err != nil {
 		utils.FailWithMessage(err.Error(), c)
 		return
 	}
-	fmt.Println(123)
+	res, err := server.Server.Tag.List(&req)
+	if err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithData(res, "获取成功", c)
 }
 
 // Read 编辑查看详细

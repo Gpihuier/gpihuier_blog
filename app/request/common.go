@@ -2,7 +2,7 @@ package request
 
 // PageInfo 分页参数
 type PageInfo struct {
-	Paging   int `json:"paging" form:"paging" comment:"是否分页 0分页 1不分页"`
-	Page     int `json:"page" form:"page" comment:"是否分页 0分页 1不分页"`
-	PageSize int `json:"page_size" form:"page_size" comment:"是否分页 0分页 1不分页"`
+	Paging   string `form:"paging" validate:"omitempty,number" alias:"是否分页"`
+	Page     string `form:"page" validate:"omitempty,number" alias:"当前页码"`
+	PageSize string `form:"page_size" validate:"omitempty,number" alias:"分页数量"`
 }
