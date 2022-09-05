@@ -2,8 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
-	"github.com/Gpihuier/gpihuier_blog/app/request"
 	"github.com/Gpihuier/gpihuier_blog/global"
 	"gorm.io/gorm"
 )
@@ -23,32 +21,35 @@ func (t *Tag) RegisterTable() error {
 	return nil
 }
 
-func (t *Tag) Create(req *request.TagSave) error {
-	// 判断是否已经有重复的标签名称
-	isHas := global.DB.Where("tag_name = ?", req.TagName).First(&t).Error
-	if errors.Is(isHas, gorm.ErrRecordNotFound) {
-		// 新增数据
-		t.TagName = req.TagName
-		t.TagColor = req.TagColor
-		return global.DB.Create(&t).Error
+// IsHasTagName 判断是否存在标签名称
+func (t *Tag) IsHasTagName() bool {
+	var res Tag
+	var isHas error
+	if t.ID > 0 {
+		isHas = global.DB.Where("id <> ? AND tag_name = ?", t.ID, t.TagName).First(&res).Error
+	} else {
+		isHas = global.DB.Where("tag_name = ?", t.TagName).First(&res).Error
 	}
-	return errors.New("标签名称已被使用")
+	if isHas == nil {
+		return true
+	} else {
+		return false
+	}
 }
 
-func (t *Tag) Update(id uint64, req *request.TagSave) error {
+// IsExist 判断更新是否存在
+func (t *Tag) IsExist() (*Tag, error) {
 	var res Tag
-	isExist := global.DB.First(&res, id).Error
-	if errors.Is(isExist, gorm.ErrRecordNotFound) {
-		return errors.New("没有找到该标签")
+	if errors.Is(global.DB.First(&res, t.ID).Error, gorm.ErrRecordNotFound) {
+		return nil, errors.New("没有找到该标签")
 	}
-	fmt.Println(res)
-	isHas := global.DB.Where("id <> ? AND tag_name = ?", id, req.TagName).First(&res).Error
-	fmt.Println(res)
-	if errors.Is(isHas, gorm.ErrRecordNotFound) {
-		res.TagName = req.TagName
-		res.TagColor = req.TagColor
-		fmt.Println(res)
-		return global.DB.Save(&res).Error
-	}
-	return errors.New("标签名称已被使用")
+	return &res, nil
+}
+
+func (t *Tag) Create() error {
+	return global.DB.Create(&t).Error
+}
+
+func (t *Tag) Update() error {
+	return global.DB.Where("id = ?", t.ID).First(&Tag{}).Updates(&t).Error
 }
