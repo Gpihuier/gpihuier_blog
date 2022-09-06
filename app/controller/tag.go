@@ -3,13 +3,13 @@ package controller
 
 import (
 	"errors"
-	"fmt"
+	"io"
+	"strconv"
+
 	"github.com/Gpihuier/gpihuier_blog/app/request"
 	"github.com/Gpihuier/gpihuier_blog/app/server"
 	"github.com/Gpihuier/gpihuier_blog/app/validate"
 	"github.com/Gpihuier/gpihuier_blog/utils"
-	"io"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -43,7 +43,18 @@ func (t *Tag) List(c *gin.Context) {
 // @method: GET
 // @route: /api/tag/list/:id
 func (t *Tag) Read(c *gin.Context) {
-	fmt.Println(c.Param("id"))
+	id := c.Param("id")
+	uint64Id, err := strconv.ParseUint(id, 0, 64)
+	if err != nil {
+		utils.FailWithMessage("请输入正整数", c)
+		return
+	}
+	res, err := server.Server.Tag.Read(uint64Id)
+	if err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithData(*res, "获取成功", c)
 }
 
 // Create 新增标签
@@ -101,5 +112,15 @@ func (t *Tag) Update(c *gin.Context) {
 // @method: DELETE
 // @route: /api/tag/delete/:id
 func (t *Tag) Delete(c *gin.Context) {
-
+	id := c.Param("id")
+	uint64Id, err := strconv.ParseUint(id, 0, 64)
+	if err != nil {
+		utils.FailWithMessage("请输入正整数", c)
+		return
+	}
+	if err = server.Server.Tag.Delete(uint64Id); err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithMessage("删除成功", c)
 }

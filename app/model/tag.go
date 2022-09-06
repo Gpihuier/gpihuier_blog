@@ -39,7 +39,7 @@ func (t *Tag) IsHasTagName() bool {
 	}
 }
 
-// IsExist 判断更新是否存在
+// IsExist 判断标签是否存在
 func (t *Tag) IsExist() (*Tag, error) {
 	var res Tag
 	if errors.Is(global.DB.First(&res, t.ID).Error, gorm.ErrRecordNotFound) {

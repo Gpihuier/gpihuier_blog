@@ -2,6 +2,7 @@ package server
 
 import (
 	"errors"
+	"gorm.io/gorm"
 	"strconv"
 	"strings"
 
@@ -75,4 +76,23 @@ func (t *Tag) List(req *request.TagList) (*response.ListData, error) {
 	listData.Total = total
 	listData.List = list
 	return &listData, err
+}
+
+func (t *Tag) Read(id uint64) (*map[string]any, error) {
+	data := make(map[string]any, 1)
+	err := global.DB.Model(&model.Tag{}).Where("id = ?", id).Select("id,tag_name,tag_color").First(&data).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("没有找到该标签")
+	}
+	return &data, nil
+}
+
+func (t *Tag) Delete(id uint64) error {
+	var res model.Tag
+	res.ID = id
+	exist, err := res.IsExist()
+	if err != nil {
+		return err
+	}
+	return global.DB.Delete(&exist).Error
 }

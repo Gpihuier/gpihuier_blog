@@ -19,6 +19,6 @@ func (t *TagRouters) Group(r *gin.RouterGroup) {
 		tag.GET("list/:id", controller.Controller.Tag.Read)
 	}
 	{
-		tag.DELETE("list", controller.Controller.Tag.Delete)
+		tag.DELETE("delete/:id", controller.Controller.Tag.Delete)
 	}
 }
