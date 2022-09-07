@@ -1,9 +1,10 @@
 package server
 
 import (
-	"github.com/Gpihuier/gpihuier_blog/utils"
 	"strconv"
 	"strings"
+
+	"github.com/Gpihuier/gpihuier_blog/utils"
 
 	"github.com/Gpihuier/gpihuier_blog/app/model"
 	"github.com/Gpihuier/gpihuier_blog/app/request"
@@ -32,4 +33,8 @@ func (a *Article) Create(req *request.ArticleSave, c *gin.Context) error {
 	}
 	// 预加载
 	return global.DB.Preload("ArticleContent").Create(&res).Error
+}
+
+func (a *Article) Update(id uint64, req *request.ArticleSave, c *gin.Context) error {
+	return nil
 }

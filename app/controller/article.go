@@ -2,10 +2,11 @@ package controller
 
 import (
 	"errors"
-	"github.com/Gpihuier/gpihuier_blog/app/server"
 	"io"
+	"strconv"
 
 	"github.com/Gpihuier/gpihuier_blog/app/request"
+	"github.com/Gpihuier/gpihuier_blog/app/server"
 	"github.com/Gpihuier/gpihuier_blog/app/validate"
 	"github.com/Gpihuier/gpihuier_blog/utils"
 
@@ -55,7 +56,30 @@ func (a *Article) Create(c *gin.Context) {
 // @method: PUT
 // @route: /api/article/save/:id
 func (a *Article) Update(c *gin.Context) {
-
+	var req request.ArticleSave
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if !errors.Is(err, io.EOF) { // 排除io.EOF 错误
+			utils.FailWithMessage(err.Error(), c)
+			return
+		}
+	}
+	if err := validate.Validate.Article.ArticleSaveValidate(&req); err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	// 获取ID
+	id := c.Param("id")
+	uint64Id, err := strconv.ParseUint(id, 0, 64)
+	if err != nil {
+		utils.FailWithMessage("请输入正整数", c)
+		return
+	}
+	// 更新数据
+	if err := server.Server.Article.Update(uint64Id, &req, c); err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithMessage("更新成功", c)
 }
 
 // Delete 删除
