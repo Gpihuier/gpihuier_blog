@@ -34,7 +34,8 @@ func Routers() *gin.Engine {
 	PrivateGroup := Router.Group("")
 	PrivateGroup.Use(middleware.JwtMiddleware())
 	{
-		RouterEnter.TagRouters.Group(PrivateGroup) // 标签路由
+		RouterEnter.TagRouters.Group(PrivateGroup)     // 标签路由
+		RouterEnter.ArticleRouters.Group(PrivateGroup) // 文章路由
 	}
 
 	global.LOG.Info("router register success")
