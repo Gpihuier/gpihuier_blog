@@ -7,6 +7,7 @@ import (
 
 	"github.com/Gpihuier/gpihuier_blog/app/model"
 	"github.com/Gpihuier/gpihuier_blog/app/request"
+	"github.com/Gpihuier/gpihuier_blog/app/response"
 	"github.com/Gpihuier/gpihuier_blog/global"
 	"github.com/Gpihuier/gpihuier_blog/utils"
 
@@ -75,16 +76,19 @@ func (a *Article) Update(id uint64, req *request.ArticleSave, c *gin.Context) er
 	})
 }
 
-func (a *Article) Read(id uint64) (*map[string]any, error) {
-	data := make(map[string]any)
+func (a *Article) Read(id uint64) (*response.Article, error) {
+	var res response.Article
 	err := global.DB.Model(&model.Article{}).
 		Where("id = ?", id).
-		Preload("ArticleContent").
-		Omit("UpdateTime").
-		First(&data).Error
+		First(&res).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, errors.New("没有找到该文章")
 	}
-
-	return &data, nil
+	err = global.DB.Model(&model.ArticleContent{}).
+		Where("article_id = ?", id).
+		First(&res.ArticleContent).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, errors.New("没有找到该文章")
+	}
+	return &res, nil
 }
