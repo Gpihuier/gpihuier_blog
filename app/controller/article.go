@@ -26,7 +26,18 @@ func (a *Article) List(c *gin.Context) {
 // @method: GET
 // @route: /api/article/list/:id
 func (a *Article) Read(c *gin.Context) {
-
+	id := c.Param("id")
+	uint64Id, err := strconv.ParseUint(id, 0, 64)
+	if err != nil {
+		utils.FailWithMessage("请输入正整数", c)
+		return
+	}
+	res, err := server.Server.Article.Read(uint64Id)
+	if err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithData(*res, "获取成功", c)
 }
 
 // Create 创建
