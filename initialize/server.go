@@ -28,7 +28,7 @@ func RunSever() {
 	time.Sleep(10 * time.Microsecond)
 	global.LOG.Info("server run success on ", zap.String("address", address))
 
-	fmt.Printf(`this is for Gpihuier
+	fmt.Printf(`Power By Gpihuier
 **        ****        **       ***********      **      **
  **      **  **      **        **               **      **
   **    **    **    **         **  *******      **********
