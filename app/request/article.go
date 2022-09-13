@@ -7,3 +7,8 @@ type ArticleSave struct {
 	Status     string `json:"status" validate:"required,number,oneof=0 1" alias:"文章状态"`
 	Content    string `json:"content" validate:"required,max=60000,min=1" alias:"文章正文"`
 }
+
+type ArticleList struct {
+	PageInfo PageInfo
+	Keyword  string `json:"keyword" validate:"omitempty,max=30,min=2" alias:"关键词"`
+}

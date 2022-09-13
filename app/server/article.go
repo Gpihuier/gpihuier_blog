@@ -92,3 +92,59 @@ func (a *Article) Read(id uint64) (*response.Article, error) {
 	}
 	return &res, nil
 }
+
+func (a *Article) List(req *request.PageInfo) (*response.ListData, error) {
+	var err error
+	var listData response.ListData
+	var total int64
+	var list []response.ArticleList
+
+	// TODO 尝试新的写法
+
+	db := global.DB.Model(&model.Article{})
+
+	if len(req.Keyword) > 0 {
+		db = global.DB.Model(&model.Article{}).Where("`blog_article`.`title` like ?", req.Keyword+"%")
+	}
+
+	paging, _ := strconv.Atoi(req.Paging)
+
+	db.Count(&total)
+
+	field := `
+blog_article.id,
+blog_article.create_time,
+blog_article.title,
+blog_article.author_id,
+blog_article.category_id,
+blog_article.is_top,
+blog_category.title as category_title
+`
+	order := "`blog_article`.`is_top` DESC,`blog_article`.`create_time` DESC"
+
+	db.Joins("LEFT JOIN `blog_category` ON `blog_article`.`category_id` = `blog_category`.`id`").Select(field).Order(order)
+
+	if paging > 0 { // 分页返回数据
+		page, _ := strconv.Atoi(req.Page)
+		if page <= 0 {
+			page = 1
+		}
+		pageSize, _ := strconv.Atoi(req.PageSize)
+		if pageSize <= 0 {
+			pageSize = 10
+		}
+		limit, offset := utils.GetPageData(page, pageSize)
+		err = db.Limit(limit).Offset(offset).Find(&list).Error
+	} else {
+		err = db.Find(&list).Error
+	}
+	if len(list) > 0 {
+		for k, v := range list {
+			createTime, _ := utils.DateToTime(v.CreateTime, utils.RFC3339Milli)
+			list[k].CreateTime = createTime.Format(utils.DEFAULT_YMD)
+		}
+	}
+	listData.Total = total
+	listData.List = list
+	return &listData, err
+}

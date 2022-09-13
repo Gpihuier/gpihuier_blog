@@ -19,7 +19,23 @@ type Article struct{}
 // @method: GET
 // @route: /api/article/list
 func (a *Article) List(c *gin.Context) {
-
+	var req request.PageInfo
+	if err := c.ShouldBindQuery(&req); err != nil {
+		if !errors.Is(err, io.EOF) {
+			utils.FailWithMessage(err.Error(), c)
+			return
+		}
+	}
+	if err := validate.Validate.Common.ValidatePageInfo(&req); err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	res, err := server.Server.Article.List(&req)
+	if err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithData(res, "获取成功", c)
 }
 
 // Read 获取单个列表
