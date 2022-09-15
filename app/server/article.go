@@ -148,3 +148,19 @@ blog_category.title as category_title
 	listData.List = list
 	return &listData, err
 }
+
+func (a *Article) Delete(id uint64) error {
+	var err error
+	err = global.DB.Where("id = ?", id).First(&model.Article{}).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.New("没有找到该文章")
+	}
+	return global.DB.Transaction(func(tx *gorm.DB) error {
+		err = global.DB.Delete(&model.Article{}, id).Error
+		err = global.DB.Where("article_id = ?", id).Delete(&model.ArticleContent{}).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+}

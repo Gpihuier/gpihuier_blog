@@ -102,7 +102,7 @@ func (a *Article) Update(c *gin.Context) {
 		return
 	}
 	// 更新数据
-	if err := server.Server.Article.Update(uint64Id, &req, c); err != nil {
+	if err = server.Server.Article.Update(uint64Id, &req, c); err != nil {
 		utils.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -113,5 +113,15 @@ func (a *Article) Update(c *gin.Context) {
 // @method: DELETE
 // @route: /api/article/delete/:id
 func (a *Article) Delete(c *gin.Context) {
-
+	id := c.Param("id")
+	uint64Id, err := strconv.ParseUint(id, 0, 64)
+	if err != nil {
+		utils.FailWithMessage("请输入正整数", c)
+		return
+	}
+	if err = server.Server.Article.Delete(uint64Id); err != nil {
+		utils.FailWithMessage(err.Error(), c)
+		return
+	}
+	utils.SuccessWithMessage("删除成功", c)
 }
